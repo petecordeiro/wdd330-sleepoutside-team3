@@ -7,11 +7,28 @@ export function qs(selector, parent = document) {
 
 // retrieve data from localstorage
 export function getLocalStorage(key) {
-  return JSON.parse(localStorage.getItem(key));
+  const data = JSON.parse(localStorage.getItem(key));
+  return key === "so-cart" && !Array.isArray(data) ? [] : data;
 }
 // save data to local storage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
+  if (key === "so-cart") updateCartCount();
+}
+
+function updateCartCount() {
+  const badge = document.querySelector(".cart-count");
+  if (!badge) return;
+
+  const count = (getLocalStorage("so-cart") || []).length;
+  badge.textContent = count;
+  badge.hidden = count === 0;
+  badge
+    .closest("a")
+    .setAttribute(
+      "aria-label",
+      `View shopping cart, ${count} ${count === 1 ? "item" : "items"}`,
+    );
 }
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
@@ -67,6 +84,7 @@ export async function loadHeaderFooter() {
       try {
         const template = await loadTemplate(`/partials/${section}.html`);
         renderWithTemplate(template, element);
+        if (section === "header") updateCartCount();
       } catch {
         element.textContent = `Unable to load the ${section}. Please refresh the page.`;
       }

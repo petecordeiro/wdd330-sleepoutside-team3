@@ -134,6 +134,25 @@ button {
   width: 25px;
 }
 
+.cart a {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-count {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.25rem;
+  min-width: 1.25rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background-color: var(--primary-color);
+  color: #4b2673;
+  font-size: 0.85rem;
+  font-weight: bold;
+  line-height: 1.25rem;
+}
+
 .cart:hover svg {
   fill: gray;
 }
