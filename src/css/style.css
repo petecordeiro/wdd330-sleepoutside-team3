@@ -342,6 +342,25 @@ button {
   }
 }
 
+#sortSelect {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-body);
+  font-size: var(--font-base);
+  color: var(--dark-grey);
+  border: 2px solid var(--light-grey);
+  border-radius: 6px;
+  background-color: var(--light-grey);
+  cursor: pointer;
+}
+
+#sortSelect:hover,
+#sortSelect:focus {
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+  outline: none;
+}
+
 footer {
   font-size: var(--small-font);
   padding: 1em;

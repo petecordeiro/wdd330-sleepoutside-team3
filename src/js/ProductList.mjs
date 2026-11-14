@@ -1,10 +1,11 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
+  const image = product.Images?.PrimaryMedium ?? product.Image;
   return `
     <li class="product-card">
       <a href="/product_pages/?product=${encodeURIComponent(product.Id)}">
-        <img src="${product.Images.PrimaryMedium}" alt="${product.Name}">
+        <img src="${image}" alt="${product.Name}">
         <h3 class="card__brand">${product.Brand.Name}</h3>
         <h2 class="card__name">${product.NameWithoutBrand}</h2>
         <p class="product-card__price">$${product.FinalPrice.toFixed(2)}</p>
@@ -23,11 +24,10 @@ export default class ProductList {
 
   async init() {
     try {
-      const list = await this.dataSource.getData(this.category);
-      this.renderList(list);
       this.products = await this.dataSource.getData(this.category);
       this.renderList(this.products);
-    } catch {
+    } catch (err) {
+      console.error(err);
       this.listElement.innerHTML = `<li class="product-list__message">Unable to load products. Please try again.</li>`;
     }
   }
@@ -49,10 +49,10 @@ export default class ProductList {
     const sorted = [...this.products];
     switch (sortType) {
       case "name-asc":
-        sorted.sort((a, b) => a.Name.localeCompare(b.Name));
+        sorted.sort((a, b) => a.NameWithoutBrand.localeCompare(b.NameWithoutBrand));
         break;
       case "name-desc":
-        sorted.sort((a, b) => b.Name.localeCompare(a.Name));
+        sorted.sort((a, b) => b.NameWithoutBrand.localeCompare(a.NameWithoutBrand));
         break;
       case "price-asc":
         sorted.sort((a, b) => a.FinalPrice - b.FinalPrice);

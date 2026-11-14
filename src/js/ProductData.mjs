@@ -8,22 +8,29 @@ function convertToJson(res) {
   }
 }
 
-async function getResult(path) {
-  if (!baseURL) {
-    throw new Error("VITE_SERVER_URL must be configured.");
-  }
-  const serverURL = baseURL.endsWith("/") ? baseURL : `${baseURL}/`;
-  const response = await fetch(new URL(path, serverURL));
+async function getCategory(category) {
+   const response = await fetch(`/json/${encodeURIComponent(category)}.json`);
   const data = await convertToJson(response);
-  return data.Result;
+  // some files are { Result: [...] }, others are a plain array
+  return Array.isArray(data) ? data : data.Result;
 }
 
 export default class ProductData {
   async getData(category) {
-    return getResult(`products/search/${encodeURIComponent(category)}`);
+    return getCategory(category);
   }
 
   async findProductById(id) {
-    return getResult(`product/${encodeURIComponent(id)}`);
+    const categories = ["tents", "sleeping-bags", "backpacks", "hammocks"];
+    for (const category of categories) {
+      try {
+        const list = await getCategory(category);
+        const found = list.find((p) => p.Id === id);
+        if (found) return found;
+      } catch (err) {
+        console.error(err); // skip a missing file and keep looking
+      }
+    }
+    return undefined;
   }
 }

@@ -23,7 +23,7 @@ if (Object.hasOwn(categories, category)) {
 
   const productList = new ProductList(category, new ProductData(), listElement);
   productList.init();
-  select.addEventListener("change", () => {
+  select?.addEventListener("change", () => {
     productList.sortProducts(select.value);
   })
 } else {
