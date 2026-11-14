@@ -1,5 +1,26 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 
+// Builds one swatch button per color.
+// Returns an empty string when the product has only one color (nothing to pick).
+function colorSwatchesTemplate(colors) {
+  if (!colors || colors.length <= 1) {
+    return "";
+  }
+
+  // map runs once per color: "color" is the current color object, "index" is its position.
+  // The first swatch (index 0) starts selected.
+  const swatches = colors.map(
+    (
+      color,
+      index,
+    ) => `<button type="button" class="color-swatch${index === 0 ? " selected" : ""}" data-index="${index}" title="${color.ColorName}" aria-pressed="${index === 0}">
+      <img src="${color.ColorChipImageSrc}" alt="${color.ColorName}" />
+    </button>`,
+  );
+
+  return `<div class="product__colors" role="group" aria-label="Choose a color">${swatches.join("")}</div>`;
+}
+
 function productDetailTemplate(product) {
   return `
     <h3>${product.Brand.Name}</h3>
@@ -7,6 +28,7 @@ function productDetailTemplate(product) {
     <img class="divider" src="${product.Images.PrimaryLarge}" alt="${product.Name}" />
     <p class="product-card__price">$${product.FinalPrice.toFixed(2)}</p>
     <p class="product__color">${product.Colors?.[0]?.ColorName || ""}</p>
+    ${colorSwatchesTemplate(product.Colors)}
     <div class="product__description">${product.DescriptionHtmlSimple}</div>
     <div class="product-detail__add">
       <button id="addToCart" data-id="${product.Id}">Add to Cart</button>
@@ -18,6 +40,8 @@ export default class ProductDetails {
     this.productId = productId;
     this.product = {};
     this.dataSource = dataSource;
+    // the color the customer picked
+    this.selectedColor = null;
   }
 
   async init() {
@@ -36,7 +60,11 @@ export default class ProductDetails {
         return;
       }
 
+      // until the customer clicks a swatch, the chosen color is the first one
+      this.selectedColor = this.product.Colors?.[0] || null;
+
       this.renderProductDetails();
+      this.addColorListeners();
       document
         .getElementById("addToCart")
         .addEventListener("click", this.addProductToCart.bind(this));
@@ -53,9 +81,32 @@ export default class ProductDetails {
     );
   }
 
+  // Listen for a click on every swatch. data-index tells which color was clicked.
+  addColorListeners() {
+    document.querySelectorAll(".color-swatch").forEach((button) => {
+      button.addEventListener("click", () => {
+        this.selectColor(Number(button.dataset.index));
+      });
+    });
+  }
+
+  // Save the chosen color and update the page: color name and selected swatch.
+  selectColor(index) {
+    this.selectedColor = this.product.Colors[index];
+    document.querySelector(".product__color").textContent =
+      this.selectedColor.ColorName;
+
+    document.querySelectorAll(".color-swatch").forEach((button, i) => {
+      const isSelected = i === index;
+      button.classList.toggle("selected", isSelected);
+      button.setAttribute("aria-pressed", isSelected);
+    });
+  }
+
   addProductToCart() {
     const cartItems = getLocalStorage("so-cart") || [];
-    cartItems.push(this.product);
+    // { ...this.product } copies every field of the product; then we add the chosen color
+    cartItems.push({ ...this.product, SelectedColor: this.selectedColor });
     setLocalStorage("so-cart", cartItems);
   }
 }
