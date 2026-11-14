@@ -12,6 +12,8 @@ const categories = {
 };
 const category = getParam("category") || "tents";
 const listElement = document.querySelector(".product-list");
+const select = document.getElementById("sortSelect");
+
 
 if (Object.hasOwn(categories, category)) {
   const categoryName = categories[category];
@@ -21,6 +23,9 @@ if (Object.hasOwn(categories, category)) {
 
   const productList = new ProductList(category, new ProductData(), listElement);
   productList.init();
+  select.addEventListener("change", () => {
+    productList.sortProducts(select.value);
+  })
 } else {
   listElement.innerHTML = `<li class="product-list__message">Category not found. <a href="/index.html">Choose a category</a>.</li>`;
 }

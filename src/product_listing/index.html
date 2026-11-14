@@ -12,6 +12,12 @@
     <main class="divider">
       <section class="products" aria-labelledby="products-heading">
         <h2 id="products-heading">Top Products</h2>
+        <select id="sortSelect">
+        <option value="name-asc">Name: A to Z</option>
+        <option value="name-desc">Name: Z to A</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
         <ul class="product-list" aria-live="polite">
           <li class="product-list__message">Loading products...</li>
         </ul>

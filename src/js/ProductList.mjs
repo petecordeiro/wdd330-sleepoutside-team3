@@ -18,12 +18,15 @@ export default class ProductList {
     this.category = category;
     this.dataSource = dataSource;
     this.listElement = listElement;
+    this.products = [];
   }
 
   async init() {
     try {
       const list = await this.dataSource.getData(this.category);
       this.renderList(list);
+      this.products = await this.dataSource.getData(this.category);
+      this.renderList(this.products);
     } catch {
       this.listElement.innerHTML = `<li class="product-list__message">Unable to load products. Please try again.</li>`;
     }
@@ -40,5 +43,26 @@ export default class ProductList {
     if (!list.length) {
       this.listElement.innerHTML = `<li class="product-list__message">No products available in this category.</li>`;
     }
+  }
+
+  sortProducts(sortType) {
+    const sorted = [...this.products];
+    switch (sortType) {
+      case "name-asc":
+        sorted.sort((a, b) => a.Name.localeCompare(b.Name));
+        break;
+      case "name-desc":
+        sorted.sort((a, b) => b.Name.localeCompare(a.Name));
+        break;
+      case "price-asc":
+        sorted.sort((a, b) => a.FinalPrice - b.FinalPrice);
+        break;
+      case "price-desc":
+        sorted.sort((a, b) => b.FinalPrice - a.FinalPrice);
+        break;
+      default:
+        break;
+    }
+    this.renderList(sorted);
   }
 }
