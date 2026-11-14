@@ -1,5 +1,24 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 
+
+function colorSwatchesTemplate(colors) {
+  // 1. Se colors não existir, ou tiver 1 cor ou menos, devolva "" (texto vazio).
+  if (!colors || colors.length <= 1) {
+    return "";
+  }
+  // 2. Use colors.map((color, index) => ...) para transformar cada cor no HTML abaixo.
+
+  const swatches = colors.map(
+    (color, index) => `<button type="button" class="color-swatch" data-index="${index}" title="${color.ColorName}">
+      <img src="${color.ColorChipImageSrc}" alt="${color.ColorName}" />
+    </button>`,
+  );
+
+  return `<div class="product__colors">${swatches.join("")}</div>`;
+}
+  // 3. Junte tudo com .join("") e devolva dentro de <div class="product__colors"> ... </div>
+
+
 function productDetailTemplate(product) {
   return `
     <h3>${product.Brand.Name}</h3>
@@ -7,6 +26,7 @@ function productDetailTemplate(product) {
     <img class="divider" src="${product.Images.PrimaryLarge}" alt="${product.Name}" />
     <p class="product-card__price">$${product.FinalPrice.toFixed(2)}</p>
     <p class="product__color">${product.Colors?.[0]?.ColorName || ""}</p>
+    ${colorSwatchesTemplate(product.Colors)}
     <div class="product__description">${product.DescriptionHtmlSimple}</div>
     <div class="product-detail__add">
       <button id="addToCart" data-id="${product.Id}">Add to Cart</button>

@@ -346,3 +346,31 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/* Product color swatches */
+.product__colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0 0.75rem 0.75rem;
+}
+
+.color-swatch {
+  display: inline-block;
+  margin: 0;
+  padding: 2px;
+  background: none;
+  border: 2px solid var(--light-grey);
+  border-radius: 4px;
+}
+
+.color-swatch:hover,
+.color-swatch.selected {
+  border-color: var(--secondary-color);
+}
+
+.product-detail .color-swatch img {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
