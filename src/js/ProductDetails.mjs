@@ -1,4 +1,9 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  alertMessage,
+  animateCart,
+} from "./utils.mjs";
 
 // Builds one swatch button per color.
 // Returns an empty string when the product has only one color (nothing to pick).
@@ -104,9 +109,19 @@ export default class ProductDetails {
   }
 
   addProductToCart() {
-    const cartItems = getLocalStorage("so-cart") || [];
-    // { ...this.product } copies every field of the product; then we add the chosen color
-    cartItems.push({ ...this.product, SelectedColor: this.selectedColor });
-    setLocalStorage("so-cart", cartItems);
+    try {
+      const cartItems = getLocalStorage("so-cart") || [];
+      // Keep the chosen color with each unit in the cart.
+      cartItems.push({ ...this.product, SelectedColor: this.selectedColor });
+      setLocalStorage("so-cart", cartItems);
+      animateCart();
+      document.querySelector(".alert")?.remove();
+      alertMessage(`${this.product.Name} added to your cart.`, false);
+    } catch {
+      alertMessage(
+        "Unable to save this item to your cart. Please try again.",
+        false,
+      );
+    }
   }
 }
