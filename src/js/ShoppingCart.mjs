@@ -2,6 +2,7 @@ import {
   getLocalStorage,
   setLocalStorage,
   renderListWithTemplate,
+  getCartSubtotalCents,
 } from "./utils.mjs";
 
 function cartItemTemplate(item) {
@@ -60,6 +61,9 @@ export default class ShoppingCart {
     if (!cartItems.length) {
       this.listElement.innerHTML = `<li class="product-list__message">Your cart is empty. <a href="/index.html">Browse categories</a>.</li>`;
     }
+    document.querySelector("#cart-subtotal").textContent =
+      `$${(getCartSubtotalCents(cartItems) / 100).toFixed(2)}`;
+    document.querySelector(".cart-summary").hidden = cartItems.length === 0;
   }
 
   removeItem(productId) {

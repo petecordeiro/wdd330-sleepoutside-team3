@@ -16,6 +16,46 @@ export function setLocalStorage(key, data) {
   if (key === "so-cart") updateCartCount();
 }
 
+export function getCartSubtotalCents(items) {
+  return items.reduce(
+    (total, item) => total + Math.round(item.FinalPrice * 100),
+    0,
+  );
+}
+
+export function alertMessage(message, scroll = true) {
+  const main = document.querySelector("main");
+  const alert = document.createElement("div");
+  alert.className = "alert";
+  alert.setAttribute("role", scroll ? "alert" : "status");
+
+  const text = document.createElement("span");
+  text.textContent = message;
+  const dismiss = document.createElement("button");
+  dismiss.type = "button";
+  dismiss.className = "alert__dismiss";
+  dismiss.setAttribute("aria-label", "Dismiss message");
+  dismiss.textContent = "×";
+  dismiss.addEventListener("click", () => alert.remove());
+  alert.append(text, dismiss);
+  main.prepend(alert);
+  if (scroll) window.scrollTo({ top: 0, behavior: "instant" });
+  return alert;
+}
+
+let cartFeedbackTimer;
+
+export function animateCart() {
+  const cart = document.querySelector(".cart a");
+  if (!cart) return;
+  clearTimeout(cartFeedbackTimer);
+  cart.classList.add("cart--added");
+  cartFeedbackTimer = setTimeout(
+    () => cart.classList.remove("cart--added"),
+    125,
+  );
+}
+
 function updateCartCount() {
   const badge = document.querySelector(".cart-count");
   if (!badge) return;
