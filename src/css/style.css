@@ -400,6 +400,23 @@ footer {
   height: 40px;
 }
 
+/* Discount flag on the product detail page */
+.product__discount {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.product__discount-flag {
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background-color: var(--tertiary-color);
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
 /* Checkout and shared feedback */
 .button-link {
   display: inline-block;
