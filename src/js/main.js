@@ -1,11 +1,3 @@
-import ProductData from "./ProductData.mjs";
-import ProductList from "./ProductList.mjs";
-
-// data source for the tents category (reads json/tents.json)
-const dataSource = new ProductData("tents");
-
-// the <ul class="product-list"> on the home page where the cards go
-const element = document.querySelector(".product-list");
-
-const productList = new ProductList("Tents", dataSource, element);
-productList.init();
+// Home page.
+// The product list moved to product_listing/index.html (product-listing.js).
+// The home now shows the four category links, which are plain HTML in index.html.

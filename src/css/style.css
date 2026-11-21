@@ -261,3 +261,40 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/* Product categories on the home page */
+.categories {
+  margin-top: 2rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  list-style-type: none;
+}
+
+.category-list a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 120px;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--light-grey);
+  color: var(--dark-grey);
+  text-decoration: none;
+}
+
+.category-list a:hover {
+  border-color: var(--primary-color);
+}
+
+.category-list img {
+  width: 80px;
+  height: 80px;
+}
