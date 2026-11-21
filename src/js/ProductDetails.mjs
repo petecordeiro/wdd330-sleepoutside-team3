@@ -4,9 +4,9 @@ function productDetailTemplate(product) {
   return `
     <h3>${product.Brand.Name}</h3>
     <h2 class="divider">${product.NameWithoutBrand}</h2>
-    <img class="divider" src="${product.Image}" alt="${product.Name}" />
+    <img class="divider" src="${product.Images.PrimaryLarge}" alt="${product.Name}" />
     <p class="product-card__price">$${product.FinalPrice.toFixed(2)}</p>
-    <p class="product__color">${product.Colors[0]?.ColorName || ""}</p>
+    <p class="product__color">${product.Colors?.[0]?.ColorName || ""}</p>
     <div class="product__description">${product.DescriptionHtmlSimple}</div>
     <div class="product-detail__add">
       <button id="addToCart" data-id="${product.Id}">Add to Cart</button>
