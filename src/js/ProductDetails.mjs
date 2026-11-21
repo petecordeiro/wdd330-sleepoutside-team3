@@ -26,10 +26,6 @@ function colorSwatchesTemplate(colors) {
   return `<div class="product__colors" role="group" aria-label="Choose a color">${swatches.join("")}</div>`;
 }
 
-// Discount = suggested retail price - final price.
-// The math is done in cents (whole numbers) to avoid decimal errors:
-// 60 - 39.99 gives 20.010000000000002, but 6000 - 3999 gives exactly 2001.
-// Returns null when the product is not discounted.
 export function getDiscount(product) {
   const suggestedCents = Math.round((product.SuggestedRetailPrice || 0) * 100);
   const finalCents = Math.round(product.FinalPrice * 100);
@@ -45,8 +41,6 @@ export function getDiscount(product) {
   };
 }
 
-// Flag shown under the price, e.g. "33% OFF You save $20.01 (was $60.00)".
-// Returns an empty string when there is no discount, so nothing is shown.
 function discountTemplate(product) {
   const discount = getDiscount(product);
   if (!discount) {
