@@ -26,12 +26,46 @@ function colorSwatchesTemplate(colors) {
   return `<div class="product__colors" role="group" aria-label="Choose a color">${swatches.join("")}</div>`;
 }
 
+// Discount = suggested retail price - final price.
+// The math is done in cents (whole numbers) to avoid decimal errors:
+// 60 - 39.99 gives 20.010000000000002, but 6000 - 3999 gives exactly 2001.
+// Returns null when the product is not discounted.
+export function getDiscount(product) {
+  const suggestedCents = Math.round((product.SuggestedRetailPrice || 0) * 100);
+  const finalCents = Math.round(product.FinalPrice * 100);
+
+  if (finalCents >= suggestedCents) {
+    return null;
+  }
+
+  const savingsCents = suggestedCents - finalCents;
+  return {
+    amount: savingsCents / 100,
+    percent: Math.round((savingsCents / suggestedCents) * 100),
+  };
+}
+
+// Flag shown under the price, e.g. "33% OFF You save $20.01 (was $60.00)".
+// Returns an empty string when there is no discount, so nothing is shown.
+function discountTemplate(product) {
+  const discount = getDiscount(product);
+  if (!discount) {
+    return "";
+  }
+
+  return `<p class="product__discount">
+      <span class="product__discount-flag">${discount.percent}% OFF</span>
+      <span>You save $${discount.amount.toFixed(2)} (was <s>$${product.SuggestedRetailPrice.toFixed(2)}</s>)</span>
+    </p>`;
+}
+
 function productDetailTemplate(product) {
   return `
     <h3>${product.Brand.Name}</h3>
     <h2 class="divider">${product.NameWithoutBrand}</h2>
     <img class="divider" src="${product.Images.PrimaryLarge}" alt="${product.Name}" />
     <p class="product-card__price">$${product.FinalPrice.toFixed(2)}</p>
+    ${discountTemplate(product)}
     <p class="product__color">${product.Colors?.[0]?.ColorName || ""}</p>
     ${colorSwatchesTemplate(product.Colors)}
     <div class="product__description">${product.DescriptionHtmlSimple}</div>
