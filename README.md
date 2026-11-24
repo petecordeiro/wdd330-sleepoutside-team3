@@ -26,5 +26,9 @@ Copy `src/.env.sample` to `src/.env` before starting the development server or b
 
 For Render deployments, add `VITE_SERVER_URL=https://wdd330-backend-osp8.onrender.com/` under the site's environment variables and rebuild the site. The local `.env` file is ignored by Git.
 
+### Week 04 Checkout
+
+See the [Week 04 checklist](docs/week04.md) for assignment coverage, verification commands, test-order details, and the remaining course submission steps.
+
 ---
 _BYU-Pathway Worldwide improves lives through access to spiritually based, online affordable higher education. Its mission is to develop disciples of Jesus Christ who are leaders in their homes, the Church, and their communities._

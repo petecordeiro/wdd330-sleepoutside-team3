@@ -18,6 +18,164 @@
     <main class="divider">
       <section class="products">
         <h2>Review & Place your Order</h2>
+        <p id="checkout-empty" hidden>
+          Your cart is empty. <a href="/index.html">Browse categories</a> to get
+          started.
+        </p>
+        <div class="checkout-layout">
+          <form id="checkout-form" method="post">
+            <p class="checkout-hint">
+              All fields are required. Shipping and billing addresses are the
+              same.
+            </p>
+            <fieldset>
+              <legend>Shipping</legend>
+              <label for="fname">First Name</label>
+              <input
+                id="fname"
+                name="fname"
+                autocomplete="given-name"
+                pattern=".*\S.*"
+                required
+              />
+              <label for="lname">Last Name</label>
+              <input
+                id="lname"
+                name="lname"
+                autocomplete="family-name"
+                pattern=".*\S.*"
+                required
+              />
+              <label for="street">Street Address</label>
+              <input
+                id="street"
+                name="street"
+                autocomplete="street-address"
+                pattern=".*\S.*"
+                required
+              />
+              <label for="city">City</label>
+              <input
+                id="city"
+                name="city"
+                autocomplete="address-level2"
+                pattern=".*\S.*"
+                required
+              />
+              <div class="checkout-fields">
+                <div>
+                  <label for="state">State</label>
+                  <span class="field-hint" id="state-hint"
+                    >Two-letter US state code</span
+                  >
+                  <input
+                    id="state"
+                    name="state"
+                    autocomplete="address-level1"
+                    minlength="2"
+                    maxlength="2"
+                    pattern="[A-Za-z]{2}"
+                    aria-describedby="state-hint"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="zip">ZIP Code</label>
+                  <span class="field-hint" id="zip-hint"
+                    >5 digits, or ZIP+4</span
+                  >
+                  <input
+                    id="zip"
+                    name="zip"
+                    autocomplete="postal-code"
+                    inputmode="numeric"
+                    pattern="[0-9]{5}(-[0-9]{4})?"
+                    maxlength="10"
+                    aria-describedby="zip-hint"
+                    required
+                  />
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Payment</legend>
+              <label for="cardNumber">Credit Card Number</label>
+              <span class="field-hint" id="card-hint"
+                >16 digits; spaces are welcome</span
+              >
+              <input
+                id="cardNumber"
+                name="cardNumber"
+                type="text"
+                inputmode="numeric"
+                autocomplete="cc-number"
+                pattern="\s*([0-9]\s*){16}"
+                maxlength="23"
+                aria-describedby="card-hint"
+                required
+              />
+              <div class="checkout-fields">
+                <div>
+                  <label for="expiration">Expiration Date</label>
+                  <span class="field-hint" id="expiration-hint">MM/YY</span>
+                  <input
+                    id="expiration"
+                    name="expiration"
+                    autocomplete="cc-exp"
+                    pattern="(0[1-9]|1[0-2])/[0-9]{2}"
+                    maxlength="5"
+                    aria-describedby="expiration-hint"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="code">Security Code</label>
+                  <span class="field-hint" id="code-hint">3 or 4 digits</span>
+                  <input
+                    id="code"
+                    name="code"
+                    type="text"
+                    autocomplete="cc-csc"
+                    inputmode="numeric"
+                    pattern="[0-9]{3,4}"
+                    maxlength="4"
+                    aria-describedby="code-hint"
+                    required
+                  />
+                </div>
+              </div>
+            </fieldset>
+          </form>
+          <aside id="order-summary" aria-labelledby="summary-heading">
+            <h3 id="summary-heading">Order Summary</h3>
+            <p id="item-count"></p>
+            <dl aria-live="polite" aria-atomic="true">
+              <div>
+                <dt>Subtotal</dt>
+                <dd id="subtotal">$0.00</dd>
+              </div>
+              <div>
+                <dt>Tax (6%)</dt>
+                <dd id="tax">Enter ZIP</dd>
+              </div>
+              <div>
+                <dt>Shipping Estimate</dt>
+                <dd id="shipping">Enter ZIP</dd>
+              </div>
+              <div class="order-total">
+                <dt>Order Total</dt>
+                <dd id="order-total">Enter ZIP</dd>
+              </div>
+            </dl>
+            <p class="checkout-hint">
+              Enter your ZIP code to calculate tax and shipping. Shipping is $10
+              for the first item and $2 for each additional item.
+            </p>
+            <button type="submit" id="checkoutSubmit" form="checkout-form">
+              Place Order
+            </button>
+          </aside>
+        </div>
       </section>
     </main>
 

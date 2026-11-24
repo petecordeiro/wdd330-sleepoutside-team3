@@ -1,4 +1,4 @@
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import ProductList from "./ProductList.mjs";
 import { getParam, loadHeaderFooter } from "./utils.mjs";
 
@@ -21,7 +21,11 @@ if (Object.hasOwn(categories, category)) {
     `Top Products: ${categoryName}`;
   document.title = `Sleep Outside | ${categoryName}`;
 
-  const productList = new ProductList(category, new ProductData(), listElement);
+  const productList = new ProductList(
+    category,
+    new ExternalServices(),
+    listElement,
+  );
   productList.init();
   select?.addEventListener("change", () => {
     productList.sortProducts(select.value);

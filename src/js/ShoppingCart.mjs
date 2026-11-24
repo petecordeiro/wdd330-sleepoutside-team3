@@ -2,6 +2,7 @@ import {
   getLocalStorage,
   setLocalStorage,
   renderListWithTemplate,
+  getCartSubtotalCents,
 } from "./utils.mjs";
 
 function cartItemTemplate(item) {
@@ -18,14 +19,14 @@ function cartItemTemplate(item) {
   </button>
   <a href="${productUrl}" class="cart-card__image">
     <img
-      src="${item.Images?.PrimaryMedium || item.Image}"
+      src="${item.SelectedColor?.ColorPreviewImageSrc || item.Images?.PrimaryMedium || item.Image}"
       alt="${item.Name}"
     />
   </a>
   <a href="${productUrl}">
     <h2 class="card__name">${item.Name}</h2>
   </a>
-  <p class="cart-card__color">${item.Colors?.[0]?.ColorName || ""}</p>
+  <p class="cart-card__color">${item.SelectedColor?.ColorName || item.Colors?.[0]?.ColorName || ""}</p>
   <p class="cart-card__quantity">qty: 1</p>
   <p class="cart-card__price">$${item.FinalPrice.toFixed(2)}</p>
 </li>`;
@@ -60,6 +61,9 @@ export default class ShoppingCart {
     if (!cartItems.length) {
       this.listElement.innerHTML = `<li class="product-list__message">Your cart is empty. <a href="/index.html">Browse categories</a>.</li>`;
     }
+    document.querySelector("#cart-subtotal").textContent =
+      `$${(getCartSubtotalCents(cartItems) / 100).toFixed(2)}`;
+    document.querySelector(".cart-summary").hidden = cartItems.length === 0;
   }
 
   removeItem(productId) {
