@@ -1,4 +1,9 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  alertMessage,
+  removeAllAlerts,
+} from "./utils.mjs";
 
 // Builds one swatch button per color.
 // Returns an empty string when the product has only one color (nothing to pick).
@@ -108,5 +113,9 @@ export default class ProductDetails {
     // { ...this.product } copies every field of the product; then we add the chosen color
     cartItems.push({ ...this.product, SelectedColor: this.selectedColor });
     setLocalStorage("so-cart", cartItems);
+
+    // W04 stretch goal: tell the user the product went into the cart
+    removeAllAlerts();
+    alertMessage(`${this.product.NameWithoutBrand} was added to your cart.`);
   }
 }

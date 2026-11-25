@@ -30,6 +30,33 @@ function updateCartCount() {
       `View shopping cart, ${count} ${count === 1 ? "item" : "items"}`,
     );
 }
+// Shows a message at the top of <main> with a button to close it.
+// scroll = true brings the page back to the top so the user sees the message
+// (the checkout form is longer than a phone screen).
+export function alertMessage(message, scroll = true) {
+  const alertBox = document.createElement("div");
+  alertBox.classList.add("alert");
+  alertBox.setAttribute("role", "alert");
+  alertBox.innerHTML = `<p></p>
+    <button type="button" class="alert__close" aria-label="Close message">&times;</button>`;
+  // textContent (not innerHTML) because the message may come from the server
+  alertBox.querySelector("p").textContent = message;
+  alertBox
+    .querySelector(".alert__close")
+    .addEventListener("click", () => alertBox.remove());
+
+  document.querySelector("main").prepend(alertBox);
+
+  if (scroll) {
+    window.scrollTo(0, 0);
+  }
+}
+
+// Removes every message created by alertMessage.
+export function removeAllAlerts() {
+  document.querySelectorAll(".alert").forEach((alertBox) => alertBox.remove());
+}
+
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
   qs(selector).addEventListener("touchend", (event) => {

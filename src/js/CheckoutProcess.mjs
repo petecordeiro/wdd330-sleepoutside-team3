@@ -1,4 +1,9 @@
-import { getLocalStorage } from "./utils.mjs";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  alertMessage,
+  removeAllAlerts,
+} from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 const services = new ExternalServices();
@@ -84,6 +89,8 @@ export default class CheckoutProcess {
 
   // Step 7: called when the form is submitted.
   // Builds the order object with the exact keys the server expects and sends it.
+  // W04 individual: on success empty the cart and go to the success page;
+  // on error show the server's messages at the top of the page.
   async checkout(form) {
     // make sure the totals are up to date, even if the zip code was never changed
     this.calculateOrderTotal();
@@ -96,11 +103,21 @@ export default class CheckoutProcess {
     order.items = packageItems(this.list);
 
     try {
-      const response = await services.checkout(order);
-      console.log(response); // eslint-disable-line no-console
-      return response;
+      await services.checkout(order);
+      // Happy path: these lines only run if the server accepted the order.
+      // If convertToJson throws, JavaScript jumps straight to the catch below.
+      setLocalStorage(this.key, []); // empty the cart
+      location.assign("/checkout/success.html");
     } catch (err) {
-      console.log(err); // eslint-disable-line no-console
+      // Unhappy path: stay on the form so the user keeps what they typed.
+      removeAllAlerts(); // remove the messages from the previous attempt
+      if (err.name === "servicesError" && typeof err.message === "object") {
+        // The server sends one message per field, e.g. { cardNumber: "Invalid Card Number" }.
+        // Object.values gives just the messages: ["Invalid Card Number"]
+        Object.values(err.message).forEach((message) => alertMessage(message));
+      } else {
+        alertMessage("We could not place your order. Please try again.");
+      }
     }
   }
 }
